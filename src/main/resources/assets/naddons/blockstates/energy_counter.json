@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "naddons:block/energy_counter"
+    }
+  }
+}
