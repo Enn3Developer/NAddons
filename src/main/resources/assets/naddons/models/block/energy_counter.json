@@ -5,8 +5,8 @@
     32
   ],
   "textures": {
-    "0": "block/energy_counter",
-    "particle": "block/energy_counter"
+    "0": "naddons:block/energy_counter",
+    "particle": "naddons:block/energy_counter"
   },
   "elements": [
     {
