@@ -6,6 +6,7 @@ import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tiles.IEnergyStorage;
+import ic2.core.block.base.features.IWrenchableTile;
 import ic2.core.block.base.tiles.BaseTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,17 +14,20 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage, IEnergySink, IEnergySource {
+public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage, IEnergySink, IEnergySource, IWrenchableTile {
     private int storedEU;
     private long countedEU;
     private int maxEU;
     private int maxOut;
     private int tier;
     private boolean addedToEnergyNet;
+    private String emit;
+    private String accept;
 
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
@@ -32,6 +36,8 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.countedEU = 0;
         this.storedEU = 0;
         this.maxOut = 32;
+        this.emit = "west";
+        this.accept = "east";
     }
 
     public void onLoaded() {
@@ -171,7 +177,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     @Override
     public boolean canAcceptEnergy(IEnergyEmitter iEnergyEmitter, Direction direction) {
-        return direction.getAxisDirection().getName().contains("negative");
+        return direction.getName().equals(this.accept);
     }
 
     @Override
@@ -196,6 +202,47 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     @Override
     public boolean canEmitEnergy(IEnergyAcceptor iEnergyAcceptor, Direction direction) {
-        return direction.getAxisDirection().getName().contains("positive");
+        return direction.getName().equals(this.emit);
+    }
+
+    @Override
+    public boolean canSetFacing(Direction direction) {
+        return this.getFacing() != direction && direction.get2DDataValue() != -1;
+    }
+
+    @Override
+    public boolean canRemoveBlock(Player player) {
+        return true;
+    }
+
+    @Override
+    public double getDropRate(Player player) {
+        return 1.0;
+    }
+
+    @Override
+    public void setFacing(Direction direction) {
+        super.setFacing(direction);
+
+        switch (direction) {
+            case NORTH -> {
+                this.emit = "west";
+                this.accept = "east";
+            }
+            case SOUTH -> {
+                this.emit = "east";
+                this.accept = "west";
+            }
+            case EAST -> {
+                this.emit = "south";
+                this.accept = "north";
+            }
+            case WEST -> {
+                this.emit = "north";
+                this.accept = "south";
+            }
+        }
+
+        EnergyNet.INSTANCE.updateTile(this);
     }
 }
