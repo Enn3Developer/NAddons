@@ -65,6 +65,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.storedEU = tag.getInt("N_STRD");
         this.maxEU = tag.getInt("N_MAX");
         this.tier = tag.getInt("N_TIER");
+        this.maxOut = tag.getInt("N_MAXO");
     }
 
     @Override
@@ -75,6 +76,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.putInt("N_STRD", this.storedEU);
         tag.putInt("N_MAX", this.maxEU);
         tag.putInt("N_TIER", this.tier);
+        tag.putInt("N_MAXO", this.maxOut);
     }
 
     @Override
@@ -85,6 +87,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.putInt("N_STRD", this.storedEU);
         tag.putInt("N_MAX", this.maxEU);
         tag.putInt("N_TIER", this.tier);
+        tag.putInt("N_MAXO", this.maxOut);
 
         return tag;
     }
@@ -97,6 +100,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.storedEU = tag.getInt("N_STRD");
         this.maxEU = tag.getInt("N_MAX");
         this.tier = tag.getInt("N_TIER");
+        this.maxOut = tag.getInt("N_MAXO");
     }
 
     @Override
