@@ -249,7 +249,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     @Override
     public void setFacing(Direction direction) {
         this.setEnergyFacing(direction);
-
+        this.setChanged();
         this.onStateChanged();
         EnergyNet.INSTANCE.updateTile(this);
     }

@@ -48,12 +48,14 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
     @Override
     public void onStateUpdate(Level level, BlockPos blockPos, BlockState blockState, EnergyCounterTile energyCounterTile) {
         switch (energyCounterTile.getAcceptFacing()) {
-            case "east" -> blockState.setValue(BlockStateProperties.FACING, Direction.NORTH);
-            case "west" -> blockState.setValue(BlockStateProperties.FACING, Direction.SOUTH);
-            case "north" -> blockState.setValue(BlockStateProperties.FACING, Direction.WEST);
-            case "south" -> blockState.setValue(BlockStateProperties.FACING, Direction.EAST);
+            case "east" -> blockState = blockState.setValue(BlockStateProperties.FACING, Direction.NORTH);
+            case "west" -> blockState = blockState.setValue(BlockStateProperties.FACING, Direction.SOUTH);
+            case "north" -> blockState = blockState.setValue(BlockStateProperties.FACING, Direction.WEST);
+            case "south" -> blockState = blockState.setValue(BlockStateProperties.FACING, Direction.EAST);
         }
-        level.setBlockAndUpdate(blockPos, blockState);
+        if (level != null) {
+            level.setBlockAndUpdate(blockPos, blockState);
+        }
     }
 
     @Nullable
@@ -76,8 +78,6 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
     public boolean setFacing(BlockState blockState, Level level, BlockPos blockPos, Player player, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof EnergyCounterTile) {
-            blockState.setValue(BlockStateProperties.FACING, direction);
-            level.setBlockAndUpdate(blockPos, blockState);
             ((EnergyCounterTile) blockEntity).setFacing(direction);
             return true;
         }
