@@ -1,5 +1,6 @@
 package com.enn3developer.naddons.tiles;
 
+import com.enn3developer.naddons.blocks.EnergyCounterBlock;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -17,6 +18,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage, IEnergySink, IEnergySource, IWrenchableTile {
@@ -36,8 +38,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.countedEU = 0;
         this.storedEU = 0;
         this.maxOut = 32;
-        this.emit = "west";
-        this.accept = "east";
+        this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
     public void onLoaded() {
@@ -63,50 +64,56 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         return BlockEntities.ENERGY_COUNTER.get();
     }
 
-    @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-
+    private void loadTag(CompoundTag tag) {
         this.countedEU = tag.getLong("N_CNTD");
         this.storedEU = tag.getInt("N_STRD");
         this.maxEU = tag.getInt("N_MAX");
         this.tier = tag.getInt("N_TIER");
         this.maxOut = tag.getInt("N_MAXO");
+        String facing = tag.getString("N_FACE");
+        if (facing.isEmpty()) {
+            facing = "north";
+        }
+        Direction direction = Direction.byName(facing);
+        if (direction == null) {
+            direction = Direction.NORTH;
+        }
+        this.setEnergyFacing(direction);
+        ((EnergyCounterBlock) this.getBlockState().getBlock()).onStateUpdate(level, this.getBlockPos(), this.getBlockState(), this);
+    }
+
+    private void saveTag(CompoundTag tag) {
+        tag.putLong("N_CNTD", this.countedEU);
+        tag.putInt("N_STRD", this.storedEU);
+        tag.putInt("N_MAX", this.maxEU);
+        tag.putInt("N_TIER", this.tier);
+        tag.putInt("N_MAXO", this.maxOut);
+        tag.putString("N_FACE", this.getBlockState().getValue(BlockStateProperties.FACING).getName());
+    }
+
+    @Override
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
+        this.loadTag(tag);
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-
-        tag.putLong("N_CNTD", this.countedEU);
-        tag.putInt("N_STRD", this.storedEU);
-        tag.putInt("N_MAX", this.maxEU);
-        tag.putInt("N_TIER", this.tier);
-        tag.putInt("N_MAXO", this.maxOut);
+        this.saveTag(tag);
     }
 
     @Override
     public @NotNull CompoundTag getUpdateTag() {
         CompoundTag tag = super.getUpdateTag();
-
-        tag.putLong("N_CNTD", this.countedEU);
-        tag.putInt("N_STRD", this.storedEU);
-        tag.putInt("N_MAX", this.maxEU);
-        tag.putInt("N_TIER", this.tier);
-        tag.putInt("N_MAXO", this.maxOut);
-
+        this.saveTag(tag);
         return tag;
     }
 
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         super.handleUpdateTag(tag);
-
-        this.countedEU = tag.getLong("N_CNTD");
-        this.storedEU = tag.getInt("N_STRD");
-        this.maxEU = tag.getInt("N_MAX");
-        this.tier = tag.getInt("N_TIER");
-        this.maxOut = tag.getInt("N_MAXO");
+        this.loadTag(tag);
     }
 
     @Override
@@ -119,6 +126,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         int added = Math.min(this.maxEU - this.storedEU, power);
         if (added > 0) {
             this.storedEU += added;
+            this.countedEU += added;
             this.setChanged();
         }
         return added;
@@ -129,7 +137,6 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         int removed = Math.min(power, this.storedEU);
         if (removed > 0) {
             this.storedEU -= removed;
-            this.countedEU += removed;
             this.setChanged();
         }
         return removed;
@@ -163,13 +170,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     @Override
     public int acceptEnergy(Direction side, int amount, int voltage) {
         if (amount <= this.maxEU && amount > 0) {
-            int added = Math.min(amount, this.maxEU - this.storedEU);
-            if (added > 0) {
-                this.storedEU += added;
-                this.setChanged();
-            }
-
-            return amount - added;
+            return amount - this.addEnergy(amount);
         } else {
             return 0;
         }
@@ -220,10 +221,11 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         return 1.0;
     }
 
-    @Override
-    public void setFacing(Direction direction) {
-        super.setFacing(direction);
+    public String getAcceptFacing() {
+        return this.accept;
+    }
 
+    private void setEnergyFacing(Direction direction) {
         switch (direction) {
             case NORTH -> {
                 this.emit = "west";
@@ -234,15 +236,21 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
                 this.accept = "west";
             }
             case EAST -> {
-                this.emit = "south";
-                this.accept = "north";
-            }
-            case WEST -> {
                 this.emit = "north";
                 this.accept = "south";
             }
+            case WEST -> {
+                this.emit = "south";
+                this.accept = "north";
+            }
         }
+    }
 
+    @Override
+    public void setFacing(Direction direction) {
+        this.setEnergyFacing(direction);
+
+        this.onStateChanged();
         EnergyNet.INSTANCE.updateTile(this);
     }
 }

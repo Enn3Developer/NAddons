@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class Blocks {
     private static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, NAddons.MODID);
-    public static final RegistryObject<Block> ENERGY_COUNTER = REGISTER.register("energy_counter", () -> new EnergyCounterBlock(BlockBehaviour.Properties.of(Material.METAL).dynamicShape().noOcclusion()));
+    public static final RegistryObject<Block> ENERGY_COUNTER = REGISTER.register("energy_counter", () -> new EnergyCounterBlock(BlockBehaviour.Properties.of(Material.METAL).noOcclusion()));
 
     public static void register(IEventBus modEventBus) {
         REGISTER.register(modEventBus);
