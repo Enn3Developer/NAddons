@@ -12,10 +12,11 @@ public class NAddonsCrossMod extends CrossModBase {
         if (!(te instanceof EnergyCounterTile energyCounter)) {
             return null;
         }
-        
+
         CompoundTag tag = new CompoundTag();
         tag.putString(DataHelper.EUTYPE, "EU");
         tag.putDouble(DataHelper.ENERGY, energyCounter.getCountedEU());
+        tag.putDouble(DataHelper.CAPACITY, energyCounter.getAddedPerTick());
         return tag;
 
     }

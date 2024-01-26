@@ -27,6 +27,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private int maxEU;
     private int maxOut;
     private int tier;
+    private int addedPerTick;
     private boolean addedToEnergyNet;
     private String emit;
     private String accept;
@@ -38,6 +39,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.countedEU = 0;
         this.storedEU = 0;
         this.maxOut = 32;
+        this.addedPerTick = 0;
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
@@ -70,6 +72,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.maxEU = tag.getInt("N_MAX");
         this.tier = tag.getInt("N_TIER");
         this.maxOut = tag.getInt("N_MAXO");
+        this.addedPerTick = tag.getInt("N_APT");
         String facing = tag.getString("N_FACE");
         if (facing.isEmpty()) {
             facing = "north";
@@ -88,6 +91,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.putInt("N_MAX", this.maxEU);
         tag.putInt("N_TIER", this.tier);
         tag.putInt("N_MAXO", this.maxOut);
+        tag.putInt("N_APT", this.addedPerTick);
         tag.putString("N_FACE", this.getBlockState().getValue(BlockStateProperties.FACING).getName());
     }
 
@@ -127,6 +131,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         if (added > 0) {
             this.storedEU += added;
             this.countedEU += added;
+            this.addedPerTick = added;
             this.setChanged();
         }
         return added;
@@ -256,5 +261,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     public long getCountedEU() {
         return this.countedEU;
+    }
+
+    public int getAddedPerTick() {
+        return this.addedPerTick;
     }
 }
