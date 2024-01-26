@@ -18,6 +18,16 @@ public class NAddonsCrossMod extends CrossModBase {
         tag.putDouble(DataHelper.ENERGY, energyCounter.getCountedEU());
         tag.putDouble(DataHelper.CAPACITY, energyCounter.getAddedPerTick());
         return tag;
+    }
 
+    @Override
+    public CompoundTag getCardData(BlockEntity te) {
+        if (!(te instanceof EnergyCounterTile energyCounter)) {
+            return null;
+        }
+        CompoundTag tag = new CompoundTag();
+        tag.putDouble("n_energy", energyCounter.getCountedEU());
+        tag.putDouble("n_power", energyCounter.getAddedPerTick());
+        return tag;
     }
 }

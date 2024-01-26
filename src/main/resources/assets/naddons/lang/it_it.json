@@ -1,4 +1,10 @@
 {
   "itemGroup.nAddons": "N Addons",
-  "block.naddons.energy_counter": "Contatore"
+  "block.naddons.energy_counter": "N Addons Contatore",
+  "item.naddons.item_card": "N Addons Lettore Energetico",
+  "item.naddons.item_kit": "N Addons Kit Lettore Energetico",
+  "msg.naddons.n_energy": "Energia: %s Wh",
+  "msg.naddons.n_power": "Potenza: %s kW",
+  "msg.naddons.n_energy_settings": "Energia",
+  "msg.naddons.n_power_settings": "Potenza"
 }

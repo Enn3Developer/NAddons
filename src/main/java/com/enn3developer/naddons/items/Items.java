@@ -23,6 +23,8 @@ public class Items {
 
     private static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, NAddons.MODID);
     public static final RegistryObject<Item> ENERGY_COUNTER = REGISTER.register("energy_counter", () -> new BlockItem(Blocks.ENERGY_COUNTER.get(), new Item.Properties().tab(N_ADDONS_TAB)));
+    public static final RegistryObject<ItemCard> ITEM_CARD = REGISTER.register("item_card", ItemCard::new);
+    public static final RegistryObject<ItemKit> ITEM_KIT = REGISTER.register("item_kit", ItemKit::new);
 
     public static void register(IEventBus modEventBus) {
         REGISTER.register(modEventBus);
