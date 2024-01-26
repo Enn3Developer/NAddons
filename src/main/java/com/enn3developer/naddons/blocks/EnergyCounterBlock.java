@@ -6,6 +6,9 @@ import ic2.api.blocks.IWrenchable;
 import ic2.core.block.base.IStateController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -16,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,8 +81,11 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
     @Override
     public boolean setFacing(BlockState blockState, Level level, BlockPos blockPos, Player player, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        if (blockEntity instanceof EnergyCounterTile) {
-            ((EnergyCounterTile) blockEntity).setFacing(direction);
+        if (blockEntity instanceof EnergyCounterTile energyCounter) {
+            if (!energyCounter.isSimulating()) {
+                return false;
+            }
+            energyCounter.setFacing(direction);
             return true;
         }
         return false;
@@ -109,5 +116,18 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
         List<ItemStack> drops = new ArrayList<>(1);
         drops.add(new ItemStack(Items.ENERGY_COUNTER.get()));
         return drops;
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+        if (blockEntity instanceof EnergyCounterTile energyCounter) {
+            if (!energyCounter.isSimulating()) {
+                return InteractionResult.PASS;
+            }
+            pPlayer.sendSystemMessage(Component.literal("Energy Counter: " + energyCounter.getCountedEU() + " EU"));
+            return InteractionResult.SUCCESS;
+        }
+        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 }

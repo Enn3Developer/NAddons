@@ -253,4 +253,8 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.onStateChanged();
         EnergyNet.INSTANCE.updateTile(this);
     }
+
+    public long getCountedEU() {
+        return this.countedEU;
+    }
 }
