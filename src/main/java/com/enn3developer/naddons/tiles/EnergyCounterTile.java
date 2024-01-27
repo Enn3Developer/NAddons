@@ -16,6 +16,8 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -28,6 +30,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private int maxOut;
     private int tier;
     private int addedPerTick;
+    private int ticksWithoutUpdates;
     private boolean addedToEnergyNet;
     private String emit;
     private String accept;
@@ -35,12 +38,26 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
         this.tier = 1;
-        this.maxEU = 8192;
         this.countedEU = 0;
         this.storedEU = 0;
         this.maxOut = 32;
+        this.maxEU = this.maxOut * 2;
         this.addedPerTick = 0;
+        this.ticksWithoutUpdates = 0;
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        if (!(blockEntity instanceof EnergyCounterTile energyCounter)) {
+            return;
+        }
+        if (energyCounter.ticksWithoutUpdates == 0) {
+            energyCounter.ticksWithoutUpdates++;
+            energyCounter.setChanged();
+        } else {
+            energyCounter.addedPerTick = 0;
+            energyCounter.setChanged();
+        }
     }
 
     public void onLoaded() {
@@ -73,6 +90,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.tier = tag.getInt("N_TIER");
         this.maxOut = tag.getInt("N_MAXO");
         this.addedPerTick = tag.getInt("N_APT");
+        this.ticksWithoutUpdates = tag.getInt("N_TWU");
         String facing = tag.getString("N_FACE");
         if (facing.isEmpty()) {
             facing = "north";
@@ -92,6 +110,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.putInt("N_TIER", this.tier);
         tag.putInt("N_MAXO", this.maxOut);
         tag.putInt("N_APT", this.addedPerTick);
+        tag.putInt("N_TWU", this.ticksWithoutUpdates);
         tag.putString("N_FACE", this.getBlockState().getValue(BlockStateProperties.FACING).getName());
     }
 
@@ -132,6 +151,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
             this.storedEU += added;
             this.countedEU += added;
             this.addedPerTick = added;
+            this.ticksWithoutUpdates = 0;
             this.setChanged();
         }
         return added;

@@ -1,6 +1,7 @@
 package com.enn3developer.naddons.blocks;
 
 import com.enn3developer.naddons.items.Items;
+import com.enn3developer.naddons.tiles.BlockEntities;
 import com.enn3developer.naddons.tiles.EnergyCounterTile;
 import ic2.api.blocks.IWrenchable;
 import ic2.core.block.base.IStateController;
@@ -15,6 +16,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -47,6 +50,15 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
         } else {
             return this.defaultBlockState();
         }
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+        if (entityType == BlockEntities.ENERGY_COUNTER.get()) {
+            return EnergyCounterTile::tick;
+        }
+        return null;
     }
 
     @Override
