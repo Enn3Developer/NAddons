@@ -1,14 +1,18 @@
 package com.enn3developer.naddons.blocks;
 
 import com.enn3developer.naddons.NAddons;
+import com.enn3developer.naddons.menus.EnergyCounterMenu;
 import com.enn3developer.naddons.tiles.EnergyCounterTile;
 import ic2.api.blocks.IWrenchable;
 import ic2.core.block.base.IStateController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -23,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +63,22 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
             return EnergyCounterTile::tick;
         }
         return null;
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("deprecation")
+    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return new SimpleMenuProvider((containerId, inventory, player) -> new EnergyCounterMenu(containerId, inventory), Component.translatable("menu.title.naddons.energy_counter"));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, pos));
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
@@ -127,19 +148,5 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
         List<ItemStack> drops = new ArrayList<>(1);
         drops.add(new ItemStack(NAddons.ITEMS.ENERGY_COUNTER.get()));
         return drops;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-        if (blockEntity instanceof EnergyCounterTile energyCounter) {
-            if (!energyCounter.isSimulating()) {
-                return InteractionResult.PASS;
-            }
-            pPlayer.sendSystemMessage(Component.literal("Energy Counter: " + energyCounter.getCountedEU() + " EU"));
-            return InteractionResult.SUCCESS;
-        }
-        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 }
