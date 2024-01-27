@@ -2,6 +2,7 @@ package com.enn3developer.naddons;
 
 import com.enn3developer.naddons.blocks.Blocks;
 import com.enn3developer.naddons.items.Items;
+import com.enn3developer.naddons.menus.Menus;
 import com.enn3developer.naddons.tiles.BlockEntities;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -33,14 +34,20 @@ public class NAddons {
     public static final String MODID = "naddons";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public static final Blocks BLOCKS = new Blocks();
+    public static final Items ITEMS = new Items();
+    public static final BlockEntities BLOCK_ENTITIES = new BlockEntities();
+    public static final Menus MENUS = new Menus();
+
     public NAddons() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
 
-        Blocks.register(modEventBus);
-        BlockEntities.register(modEventBus);
-        Items.register(modEventBus);
+        BLOCKS.register(modEventBus);
+        BLOCK_ENTITIES.register(modEventBus);
+        ITEMS.register(modEventBus);
+        MENUS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }

@@ -1,5 +1,6 @@
 package com.enn3developer.naddons.tiles;
 
+import com.enn3developer.naddons.NAddons;
 import com.enn3developer.naddons.blocks.EnergyCounterBlock;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergyAcceptor;
@@ -80,7 +81,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     @Override
     public BlockEntityType<?> createType() {
-        return BlockEntities.ENERGY_COUNTER.get();
+        return NAddons.BLOCK_ENTITIES.ENERGY_COUNTER.get();
     }
 
     private void loadTag(CompoundTag tag) {

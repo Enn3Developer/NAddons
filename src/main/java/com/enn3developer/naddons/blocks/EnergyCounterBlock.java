@@ -1,5 +1,6 @@
 package com.enn3developer.naddons.blocks;
 
+import com.enn3developer.naddons.NAddons;
 import com.enn3developer.naddons.items.Items;
 import com.enn3developer.naddons.tiles.BlockEntities;
 import com.enn3developer.naddons.tiles.EnergyCounterTile;
@@ -55,7 +56,7 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        if (entityType == BlockEntities.ENERGY_COUNTER.get()) {
+        if (entityType == NAddons.BLOCK_ENTITIES.ENERGY_COUNTER.get()) {
             return EnergyCounterTile::tick;
         }
         return null;
@@ -126,7 +127,7 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
     @Override
     public List<ItemStack> getDrops(BlockState blockState, Level level, BlockPos blockPos, Player player) {
         List<ItemStack> drops = new ArrayList<>(1);
-        drops.add(new ItemStack(Items.ENERGY_COUNTER.get()));
+        drops.add(new ItemStack(NAddons.ITEMS.ENERGY_COUNTER.get()));
         return drops;
     }
 

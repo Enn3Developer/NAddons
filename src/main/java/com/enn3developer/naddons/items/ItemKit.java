@@ -18,7 +18,7 @@ public class ItemKit extends ItemKitMain {
         BlockEntity te = level.getBlockEntity(blockPos);
         CompoundTag tag = CrossModLoader.getCrossMod(NAddons.MODID).getCardData(te);
         if (tag != null) {
-            ItemStack newCard = new ItemStack(Items.ITEM_CARD.get());
+            ItemStack newCard = new ItemStack(NAddons.ITEMS.ITEM_CARD.get());
             ItemStackHelper.setCoordinates(newCard, blockPos);
             return newCard;
         }
