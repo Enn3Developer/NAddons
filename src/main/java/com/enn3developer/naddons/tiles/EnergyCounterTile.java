@@ -48,7 +48,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+    public static <T extends BlockEntity> void tick(Level ignoredLevel, BlockPos ignoredPos, BlockState ignoredState, T blockEntity) {
         if (!(blockEntity instanceof EnergyCounterTile energyCounter)) {
             return;
         }

@@ -1,8 +1,6 @@
 package com.enn3developer.naddons.blocks;
 
 import com.enn3developer.naddons.NAddons;
-import com.enn3developer.naddons.items.Items;
-import com.enn3developer.naddons.tiles.BlockEntities;
 import com.enn3developer.naddons.tiles.EnergyCounterTile;
 import ic2.api.blocks.IWrenchable;
 import ic2.core.block.base.IStateController;
@@ -55,7 +53,7 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
         if (entityType == NAddons.BLOCK_ENTITIES.ENERGY_COUNTER.get()) {
             return EnergyCounterTile::tick;
         }

@@ -2,7 +2,6 @@ package com.enn3developer.naddons;
 
 import com.enn3developer.naddons.tiles.EnergyCounterTile;
 import com.zuxelus.energycontrol.crossmod.CrossModBase;
-import com.zuxelus.energycontrol.utils.DataHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
