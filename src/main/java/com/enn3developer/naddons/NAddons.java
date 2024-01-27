@@ -3,8 +3,10 @@ package com.enn3developer.naddons;
 import com.enn3developer.naddons.blocks.Blocks;
 import com.enn3developer.naddons.items.Items;
 import com.enn3developer.naddons.menus.Menus;
+import com.enn3developer.naddons.screens.EnergyCounterScreen;
 import com.enn3developer.naddons.tiles.BlockEntities;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -51,6 +53,7 @@ public class NAddons {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            event.enqueueWork(() -> MenuScreens.register(MENUS.ENERGY_COUNTER.get(), EnergyCounterScreen::new));
         }
     }
 }

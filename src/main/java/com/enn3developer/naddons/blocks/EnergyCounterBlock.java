@@ -78,7 +78,7 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, pos));
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.sidedSuccess(!level.isClientSide);
     }
 
     @Override

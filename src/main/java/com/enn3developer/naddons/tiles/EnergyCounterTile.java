@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage, IEnergySink, IEnergySource, IWrenchableTile {
@@ -36,6 +37,8 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private String emit;
     private String accept;
 
+    private ItemStackHandler itemStackHandler;
+
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
         this.tier = 1;
@@ -45,6 +48,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.maxEU = this.maxOut * 2;
         this.addedPerTick = 0;
         this.ticksWithoutUpdates = 0;
+        this.itemStackHandler = new ItemStackHandler(2);
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
