@@ -7,17 +7,23 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class EnergyCounterMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
 
     public EnergyCounterMenu(int containerId, Inventory playerInv) {
-        this(containerId, playerInv, ContainerLevelAccess.NULL);
+        this(containerId, playerInv, ContainerLevelAccess.NULL, new ItemStackHandler(2));
     }
 
-    public EnergyCounterMenu(int containerId, Inventory playerInv, ContainerLevelAccess access) {
+    public EnergyCounterMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ItemStackHandler inventory) {
         super(NAddons.MENUS.ENERGY_COUNTER.get(), containerId);
         this.access = access;
+
+        this.addSlot(new SlotItemHandler(inventory, 0, 8, 18));
+        this.addSlot(new SlotItemHandler(inventory, 1, 8, 38));
 
         final int slotSizePlus2 = 18;
         final int startX = 8;
@@ -37,12 +43,12 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
+    public ItemStack quickMoveStack(@NotNull Player player, int i) {
         return null;
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return AbstractContainerMenu.stillValid(this.access, player, NAddons.BLOCKS.ENERGY_COUNTER.get());
     }
 }

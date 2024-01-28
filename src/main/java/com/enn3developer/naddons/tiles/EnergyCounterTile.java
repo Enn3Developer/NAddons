@@ -37,7 +37,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private String emit;
     private String accept;
 
-    private ItemStackHandler itemStackHandler;
+    private ItemStackHandler inventory;
 
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
@@ -48,7 +48,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.maxEU = this.maxOut * 2;
         this.addedPerTick = 0;
         this.ticksWithoutUpdates = 0;
-        this.itemStackHandler = new ItemStackHandler(2);
+        this.inventory = new ItemStackHandler(2);
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
@@ -290,5 +290,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     public int getAddedPerTick() {
         return this.addedPerTick;
+    }
+
+    public ItemStackHandler getInventory() {
+        return this.inventory;
     }
 }
