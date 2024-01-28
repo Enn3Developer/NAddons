@@ -36,8 +36,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private boolean addedToEnergyNet;
     private String emit;
     private String accept;
-
-    private ItemStackHandler inventory;
+    private final ItemStackHandler inventory;
 
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
