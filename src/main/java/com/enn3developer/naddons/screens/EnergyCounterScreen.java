@@ -1,23 +1,22 @@
 package com.enn3developer.naddons.screens;
 
+import com.enn3developer.naddons.NAddons;
 import com.enn3developer.naddons.menus.EnergyCounterMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMenu> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(NAddons.MODID, "textures/gui/energy_counter.png");
+
     public EnergyCounterScreen(EnergyCounterMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.addRenderableWidget(new EditBox(font, 0, 0, width, height, Component.literal("Test")));
     }
 
     @Override
@@ -29,6 +28,9 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
 
     @Override
     protected void renderBg(@NotNull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, BACKGROUND_LOCATION);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 }

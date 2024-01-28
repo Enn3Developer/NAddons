@@ -18,7 +18,22 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
     public EnergyCounterMenu(int containerId, Inventory playerInv, ContainerLevelAccess access) {
         super(NAddons.MENUS.ENERGY_COUNTER.get(), containerId);
         this.access = access;
-        this.addSlot(new Slot(playerInv, 0, 0, 0));
+
+        final int slotSizePlus2 = 18;
+        final int startX = 8;
+        final int startY = 84;
+        final int hotbarY = 142;
+
+        for (int row = 0; row < 3; ++row) {
+            for (int column = 0; column < 9; ++column) {
+                addSlot(new Slot(playerInv, column + row * 9 + 9, startX + column * slotSizePlus2,
+                        startY + row * slotSizePlus2));
+            }
+        }
+
+        for (int column = 0; column < 9; ++column) {
+            addSlot(new Slot(playerInv, column, startX + column * slotSizePlus2, hotbarY));
+        }
     }
 
     @Override
