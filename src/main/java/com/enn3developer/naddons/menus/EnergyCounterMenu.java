@@ -44,7 +44,7 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(@NotNull Player player, int i) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int i) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(i);
 

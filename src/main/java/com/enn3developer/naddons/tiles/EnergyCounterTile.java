@@ -33,6 +33,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private int tier;
     private int addedPerTick;
     private int ticksWithoutUpdates;
+    private int oldCounter;
+    private int meanTick;
+    private int tickUpdates;
     private boolean addedToEnergyNet;
     private String emit;
     private String accept;
@@ -48,6 +51,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.addedPerTick = 0;
         this.ticksWithoutUpdates = 0;
         this.inventory = new ItemStackHandler(2);
+        this.oldCounter = 0;
+        this.meanTick = 0;
+        this.tickUpdates = 5;
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
@@ -55,11 +61,41 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         if (!(blockEntity instanceof EnergyCounterTile energyCounter)) {
             return;
         }
-        if (energyCounter.ticksWithoutUpdates == 0) {
+
+        if (energyCounter.ticksWithoutUpdates < energyCounter.tickUpdates) {
             energyCounter.ticksWithoutUpdates++;
             energyCounter.setChanged();
         } else {
+            energyCounter.meanTick = energyCounter.addedPerTick / (energyCounter.ticksWithoutUpdates + 1);
             energyCounter.addedPerTick = 0;
+            energyCounter.ticksWithoutUpdates = 0;
+            energyCounter.setChanged();
+        }
+
+        int counter = 0;
+
+        if (!energyCounter.inventory.getStackInSlot(0).isEmpty()) {
+            counter += energyCounter.inventory.getStackInSlot(0).getCount();
+        }
+        if (!energyCounter.inventory.getStackInSlot(1).isEmpty()) {
+            counter += energyCounter.inventory.getStackInSlot(1).getCount();
+        }
+
+        if (energyCounter.oldCounter != counter) {
+            energyCounter.oldCounter = counter;
+            switch (counter) {
+                case 0 -> energyCounter.maxOut = 32;
+                case 1 -> energyCounter.maxOut = 128;
+                case 2 -> energyCounter.maxOut = 512;
+                case 3 -> energyCounter.maxOut = 2048;
+                case 4 -> energyCounter.maxOut = 4096;
+                case 5 -> energyCounter.maxOut = 8192;
+                case 6 -> energyCounter.maxOut = 16384;
+                case 7 -> energyCounter.maxOut = 32768;
+                case 8 -> energyCounter.maxOut = 65536;
+            }
+            energyCounter.maxEU = energyCounter.maxOut * 2;
+            energyCounter.tier = counter + 1;
             energyCounter.setChanged();
         }
     }
@@ -95,6 +131,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.maxOut = tag.getInt("N_MAXO");
         this.addedPerTick = tag.getInt("N_APT");
         this.ticksWithoutUpdates = tag.getInt("N_TWU");
+        this.meanTick = tag.getInt("N_MEAN");
+        this.tickUpdates = tag.getInt("N_TUP");
+        this.inventory.deserializeNBT(tag.getCompound("N_INV"));
         String facing = tag.getString("N_FACE");
         if (facing.isEmpty()) {
             facing = "north";
@@ -115,6 +154,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.putInt("N_MAXO", this.maxOut);
         tag.putInt("N_APT", this.addedPerTick);
         tag.putInt("N_TWU", this.ticksWithoutUpdates);
+        tag.putInt("N_MEAN", this.meanTick);
+        tag.putInt("N_TUP", this.tickUpdates);
+        tag.put("N_INV", this.inventory.serializeNBT());
         tag.putString("N_FACE", this.getBlockState().getValue(BlockStateProperties.FACING).getName());
     }
 
@@ -154,8 +196,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         if (added > 0) {
             this.storedEU += added;
             this.countedEU += added;
-            this.addedPerTick = added;
-            this.ticksWithoutUpdates = 0;
+            this.addedPerTick += added;
             this.setChanged();
         }
         return added;
@@ -288,7 +329,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     }
 
     public int getAddedPerTick() {
-        return this.addedPerTick;
+        return this.meanTick;
     }
 
     public ItemStackHandler getInventory() {

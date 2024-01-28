@@ -3,7 +3,6 @@ package com.enn3developer.naddons.mixins;
 import ic2.core.item.base.IC2Item;
 import ic2.core.item.upgrades.base.BaseUpgradeItem;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
