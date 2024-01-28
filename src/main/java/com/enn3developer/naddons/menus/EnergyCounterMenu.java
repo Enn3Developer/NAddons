@@ -24,15 +24,15 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
         final int startY = 84;
         final int hotbarY = 142;
 
-        for (int row = 0; row < 3; ++row) {
-            for (int column = 0; column < 9; ++column) {
-                addSlot(new Slot(playerInv, column + row * 9 + 9, startX + column * slotSizePlus2,
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 9; column++) {
+                this.addSlot(new Slot(playerInv, column + row * 9 + 9, startX + column * slotSizePlus2,
                         startY + row * slotSizePlus2));
             }
         }
 
         for (int column = 0; column < 9; ++column) {
-            addSlot(new Slot(playerInv, column, startX + column * slotSizePlus2, hotbarY));
+            this.addSlot(new Slot(playerInv, column, startX + column * slotSizePlus2, hotbarY));
         }
     }
 
