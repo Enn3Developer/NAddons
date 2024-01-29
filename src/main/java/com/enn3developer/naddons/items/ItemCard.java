@@ -36,6 +36,9 @@ public class ItemCard extends ItemCardMain {
     public List<PanelString> getStringData(Level level, int settings, ICardReader reader, boolean isServer, boolean showLabels) {
         List<PanelString> result = reader.getTitleList();
 
+        if (reader.hasField("n_customer") && (settings & 4) > 0) {
+            result.add(new PanelString("%s", reader.getString("n_customer"), showLabels));
+        }
         if (reader.hasField("n_energy") && (settings & 1) > 0) {
             result.add(new PanelString("msg.naddons.n_energy", reader.getDouble("n_energy"), showLabels));
         }
@@ -52,6 +55,7 @@ public class ItemCard extends ItemCardMain {
 
         settings.add(new PanelSetting(I18n.get("msg.naddons.n_energy_settings"), 1));
         settings.add(new PanelSetting(I18n.get("msg.naddons.n_power_settings"), 2));
+        settings.add(new PanelSetting(I18n.get("msg.naddons.n_customer_settings"), 4));
 
         return settings;
     }

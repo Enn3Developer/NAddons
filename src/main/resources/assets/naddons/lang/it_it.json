@@ -8,5 +8,6 @@
   "msg.naddons.n_power": "Potenza: %s kW",
   "msg.naddons.n_energy_settings": "Energia",
   "msg.naddons.n_power_settings": "Potenza",
+  "msg.naddons.n_customer_settings": "Cliente",
   "msg.naddons.no_permission": "Non puoi farlo"
 }
