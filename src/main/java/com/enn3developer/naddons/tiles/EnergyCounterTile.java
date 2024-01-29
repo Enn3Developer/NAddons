@@ -26,6 +26,13 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage, IEnergySink, IEnergySource, IWrenchableTile {
+    private final ItemStackHandler inventory = new ItemStackHandler(2) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            EnergyCounterTile.this.setChanged();
+            super.onContentsChanged(slot);
+        }
+    };
     private int storedEU;
     private long countedEU;
     private int maxEU;
@@ -39,13 +46,6 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private boolean addedToEnergyNet;
     private String emit;
     private String accept;
-    private final ItemStackHandler inventory = new ItemStackHandler(2) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            EnergyCounterTile.this.setChanged();
-            super.onContentsChanged(slot);
-        }
-    };
 
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
@@ -87,6 +87,9 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         }
 
         if (energyCounter.oldCounter != counter) {
+            if (counter > energyCounter.oldCounter) {
+                energyCounter.storedEU = 0;
+            }
             energyCounter.oldCounter = counter;
             switch (counter) {
                 case 0 -> energyCounter.maxOut = 32;
