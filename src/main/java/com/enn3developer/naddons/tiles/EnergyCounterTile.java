@@ -105,6 +105,14 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         }
     }
 
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+        }
+    }
+
     public void onLoaded() {
         super.onLoaded();
         if (this.isSimulating() && !this.addedToEnergyNet) {
