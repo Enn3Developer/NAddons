@@ -84,7 +84,8 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return AbstractContainerMenu.stillValid(this.access, player, NAddons.BLOCKS.ENERGY_COUNTER.get());
+        if (this.access == null) return true;
+        return stillValid(this.access, player, this.energyCounter.getBlockState().getBlock());
     }
 
     public static @Nullable EnergyCounterTile getBlockEntity(@NotNull Inventory player, @NotNull FriendlyByteBuf data) {

@@ -80,9 +80,10 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
     @SuppressWarnings("deprecation")
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, pos));
+            NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, pos), pos);
+            return InteractionResult.CONSUME;
         }
-        return InteractionResult.sidedSuccess(!level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
