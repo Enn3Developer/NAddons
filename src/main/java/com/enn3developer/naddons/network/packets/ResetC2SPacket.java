@@ -3,6 +3,7 @@ package com.enn3developer.naddons.network.packets;
 import com.enn3developer.naddons.tiles.EnergyCounterTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,8 +33,10 @@ public class ResetC2SPacket {
             if (player != null) {
                 ServerLevel level = player.getLevel();
                 BlockEntity blockEntity = level.getBlockEntity(this.pos);
-                if (blockEntity instanceof EnergyCounterTile energyCounter) {
+                if (blockEntity instanceof EnergyCounterTile energyCounter && (player.getDisplayName().getString().equals(energyCounter.getOwnerName()) && player.hasPermissions(4))) {
                     energyCounter.reset();
+                } else {
+                    player.sendSystemMessage(Component.translatable("msg.naddons.no_permission"));
                 }
             }
         });

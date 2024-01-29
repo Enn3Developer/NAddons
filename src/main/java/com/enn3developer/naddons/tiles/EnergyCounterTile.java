@@ -44,6 +44,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private int meanTick;
     private int tickUpdates;
     private boolean addedToEnergyNet;
+    private String ownerName;
     private String emit;
     private String accept;
 
@@ -59,6 +60,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.oldCounter = 0;
         this.meanTick = 0;
         this.tickUpdates = 5;
+        this.ownerName = "";
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
@@ -150,6 +152,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.meanTick = tag.getInt("N_MEAN");
         this.tickUpdates = tag.getInt("N_TUP");
         this.inventory.deserializeNBT(tag.getCompound("N_INV"));
+        this.ownerName = tag.getString("N_OWN");
         String facing = tag.getString("N_FACE");
         if (facing.isEmpty()) {
             facing = "north";
@@ -173,6 +176,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.putInt("N_MEAN", this.meanTick);
         tag.putInt("N_TUP", this.tickUpdates);
         tag.put("N_INV", this.inventory.serializeNBT());
+        tag.putString("N_OWN", this.ownerName);
         tag.putString("N_FACE", this.getBlockState().getValue(BlockStateProperties.FACING).getName());
     }
 
@@ -354,5 +358,13 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     public void reset() {
         this.countedEU = 0;
+    }
+
+    public String getOwnerName() {
+        return this.ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

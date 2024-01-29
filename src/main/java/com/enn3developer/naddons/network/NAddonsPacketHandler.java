@@ -20,7 +20,7 @@ public class NAddonsPacketHandler {
     public static void register() {
         INSTANCE = NetworkRegistry.ChannelBuilder
                 .named(new ResourceLocation(NAddons.MODID, "messages"))
-                .networkProtocolVersion(() -> "1")
+                .networkProtocolVersion(() -> "1.0")
                 .clientAcceptedVersions(s -> true)
                 .serverAcceptedVersions(s -> true)
                 .simpleChannel();
