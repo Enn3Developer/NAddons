@@ -17,7 +17,6 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
 
     public EnergyCounterScreen(EnergyCounterMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
-        System.out.println("Creating screen");
     }
 
     @Override

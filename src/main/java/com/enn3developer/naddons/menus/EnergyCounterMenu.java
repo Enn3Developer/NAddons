@@ -28,7 +28,6 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
 
     public EnergyCounterMenu(int containerId, Inventory playerInv, ItemStackHandler inventory, EnergyCounterTile energyCounter) {
         super(NAddons.MENUS.ENERGY_COUNTER.get(), containerId);
-        System.out.println("Creating menu");
         this.access = ContainerLevelAccess.create(playerInv.player.level, energyCounter.getBlockPos());
         this.energyCounter = energyCounter;
 
@@ -50,6 +49,16 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; ++column) {
             this.addSlot(new Slot(playerInv, column, startX + column * slotSizePlus2, hotbarY));
         }
+    }
+
+    public static @Nullable EnergyCounterTile getBlockEntity(@NotNull Inventory player, @NotNull FriendlyByteBuf data) {
+        BlockEntity blockEntity = player.player.level.getBlockEntity(data.readBlockPos());
+
+        if (blockEntity instanceof EnergyCounterTile energyCounter) {
+            return energyCounter;
+        }
+
+        return null;
     }
 
     public EnergyCounterTile getEnergyCounter() {
@@ -86,15 +95,5 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
     public boolean stillValid(@NotNull Player player) {
         if (this.access == null) return true;
         return stillValid(this.access, player, this.energyCounter.getBlockState().getBlock());
-    }
-
-    public static @Nullable EnergyCounterTile getBlockEntity(@NotNull Inventory player, @NotNull FriendlyByteBuf data) {
-        BlockEntity blockEntity = player.player.level.getBlockEntity(data.readBlockPos());
-
-        if (blockEntity instanceof EnergyCounterTile energyCounter) {
-            return energyCounter;
-        }
-
-        return null;
     }
 }
