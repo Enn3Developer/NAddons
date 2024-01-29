@@ -1,27 +1,36 @@
 package com.enn3developer.naddons.menus;
 
 import com.enn3developer.naddons.NAddons;
+import com.enn3developer.naddons.tiles.EnergyCounterTile;
 import com.enn3developer.naddons.utils.SlotWithRestrictions;
 import ic2.core.platform.registries.IC2Items;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class EnergyCounterMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
+    private final EnergyCounterTile energyCounter;
 
-    public EnergyCounterMenu(int containerId, Inventory playerInv) {
-        this(containerId, playerInv, ContainerLevelAccess.NULL, new ItemStackHandler(2));
+    public EnergyCounterMenu(int containerId, Inventory playerInv, FriendlyByteBuf data) {
+        this(containerId, playerInv, new ItemStackHandler(2), Objects.requireNonNull(getBlockEntity(playerInv, data)));
     }
 
-    public EnergyCounterMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ItemStackHandler inventory) {
+    public EnergyCounterMenu(int containerId, Inventory playerInv, ItemStackHandler inventory, EnergyCounterTile energyCounter) {
         super(NAddons.MENUS.ENERGY_COUNTER.get(), containerId);
-        this.access = access;
+        System.out.println("Creating menu");
+        this.access = ContainerLevelAccess.create(playerInv.player.level, energyCounter.getBlockPos());
+        this.energyCounter = energyCounter;
 
         this.addSlot(new SlotWithRestrictions(inventory, 0, 8, 18, itemStack -> itemStack.is(IC2Items.TRANSFORMER_UPGRADE)));
         this.addSlot(new SlotWithRestrictions(inventory, 1, 8, 38, itemStack -> itemStack.is(IC2Items.TRANSFORMER_UPGRADE)));
@@ -41,6 +50,10 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; ++column) {
             this.addSlot(new Slot(playerInv, column, startX + column * slotSizePlus2, hotbarY));
         }
+    }
+
+    public EnergyCounterTile getEnergyCounter() {
+        return this.energyCounter;
     }
 
     @Override
@@ -72,5 +85,15 @@ public class EnergyCounterMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(@NotNull Player player) {
         return AbstractContainerMenu.stillValid(this.access, player, NAddons.BLOCKS.ENERGY_COUNTER.get());
+    }
+
+    public static @Nullable EnergyCounterTile getBlockEntity(@NotNull Inventory player, @NotNull FriendlyByteBuf data) {
+        BlockEntity blockEntity = player.player.level.getBlockEntity(data.readBlockPos());
+
+        if (blockEntity instanceof EnergyCounterTile energyCounter) {
+            return energyCounter;
+        }
+
+        return null;
     }
 }

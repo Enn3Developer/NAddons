@@ -13,7 +13,7 @@ public class NAddonsCrossMod extends CrossModBase {
         }
         CompoundTag tag = new CompoundTag();
         tag.putDouble("n_energy", energyCounter.getCountedEU());
-        tag.putDouble("n_power", energyCounter.getAddedPerTick());
+        tag.putDouble("n_power", energyCounter.getPower());
         return tag;
     }
 }

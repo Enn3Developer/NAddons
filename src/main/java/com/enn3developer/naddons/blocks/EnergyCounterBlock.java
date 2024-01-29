@@ -14,7 +14,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -74,7 +73,7 @@ public class EnergyCounterBlock extends Block implements IStateController<Energy
         if (!(blockEntity instanceof EnergyCounterTile energyCounter)) {
             return null;
         }
-        return new SimpleMenuProvider((containerId, inventory, player) -> new EnergyCounterMenu(containerId, inventory, ContainerLevelAccess.create(level, pos), energyCounter.getInventory()), Component.translatable("menu.title.naddons.energy_counter"));
+        return new SimpleMenuProvider((containerId, inventory, player) -> new EnergyCounterMenu(containerId, inventory, energyCounter.getInventory(), energyCounter), Component.translatable("menu.title.naddons.energy_counter"));
     }
 
     @Override

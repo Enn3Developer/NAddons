@@ -39,7 +39,13 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private boolean addedToEnergyNet;
     private String emit;
     private String accept;
-    private final ItemStackHandler inventory;
+    private final ItemStackHandler inventory = new ItemStackHandler(2) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            EnergyCounterTile.this.setChanged();
+            super.onContentsChanged(slot);
+        }
+    };
 
     public EnergyCounterTile(BlockPos pPos, BlockState pBlockState) {
         super(pPos, pBlockState);
@@ -50,7 +56,6 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.maxEU = this.maxOut * 2;
         this.addedPerTick = 0;
         this.ticksWithoutUpdates = 0;
-        this.inventory = new ItemStackHandler(2);
         this.oldCounter = 0;
         this.meanTick = 0;
         this.tickUpdates = 5;
@@ -328,7 +333,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         return this.countedEU;
     }
 
-    public int getAddedPerTick() {
+    public int getPower() {
         return this.meanTick;
     }
 
