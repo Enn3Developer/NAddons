@@ -3,6 +3,7 @@ package com.enn3developer.naddons;
 import com.enn3developer.naddons.blocks.Blocks;
 import com.enn3developer.naddons.items.Items;
 import com.enn3developer.naddons.menus.Menus;
+import com.enn3developer.naddons.network.NAddonsPacketHandler;
 import com.enn3developer.naddons.screens.EnergyCounterScreen;
 import com.enn3developer.naddons.tiles.BlockEntities;
 import com.mojang.logging.LogUtils;
@@ -21,12 +22,11 @@ import org.slf4j.Logger;
 @Mod(NAddons.MODID)
 public class NAddons {
     public static final String MODID = "naddons";
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     public static final Blocks BLOCKS = new Blocks();
     public static final Items ITEMS = new Items();
     public static final BlockEntities BLOCK_ENTITIES = new BlockEntities();
     public static final Menus MENUS = new Menus();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public NAddons() {
         LOGGER.info("N is injecting malicious code in your modpack");
@@ -54,6 +54,7 @@ public class NAddons {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> MenuScreens.register(MENUS.ENERGY_COUNTER.get(), EnergyCounterScreen::new));
+            NAddonsPacketHandler.register();
         }
     }
 }

@@ -2,6 +2,8 @@ package com.enn3developer.naddons.screens;
 
 import com.enn3developer.naddons.NAddons;
 import com.enn3developer.naddons.menus.EnergyCounterMenu;
+import com.enn3developer.naddons.network.NAddonsPacketHandler;
+import com.enn3developer.naddons.network.packets.ResetC2SPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -38,8 +40,12 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
         String power = (this.menu.getEnergyCounter() != null ? this.menu.getEnergyCounter().getPower() : 0) + " kW";
         this.font.draw(poseStack, energy, drawX, drawY, 12);
         this.font.draw(poseStack, power, drawX, drawY + 10, 12);
-        this.addRenderableWidget(new ExtendedButton((int) drawX, (int) (drawY + 25), 50, 16, Component.literal("Reset"), button -> {
-
-        }));
+        this.addRenderableWidget(new ExtendedButton((int) drawX, (int) (drawY + 25), 50, 16,
+                Component.literal("Reset"),
+                button ->
+                        NAddonsPacketHandler.sendToServer(
+                                new ResetC2SPacket(this.menu.getEnergyCounter().getBlockPos())
+                        )
+        ));
     }
 }

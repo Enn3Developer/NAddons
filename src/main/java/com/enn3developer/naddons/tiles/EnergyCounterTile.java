@@ -351,4 +351,8 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     public ItemStackHandler getInventory() {
         return this.inventory;
     }
+
+    public void reset() {
+        this.countedEU = 0;
+    }
 }
