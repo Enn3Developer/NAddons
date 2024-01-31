@@ -38,6 +38,8 @@ public class NAddons {
         BLOCK_ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
         MENUS.register(modEventBus);
+        
+        NAddonsPacketHandler.register();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -54,7 +56,6 @@ public class NAddons {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> MenuScreens.register(MENUS.ENERGY_COUNTER.get(), EnergyCounterScreen::new));
-            NAddonsPacketHandler.register();
         }
     }
 }

@@ -8,8 +8,8 @@ import com.enn3developer.naddons.network.packets.ResetC2SPacket;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import ic2.core.inventory.gui.components.base.ImprovedTextWidget;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -21,11 +21,10 @@ import org.jetbrains.annotations.NotNull;
 public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(NAddons.MODID, "textures/gui/energy_counter.png");
     private final ExtendedButton button;
-    private final ImprovedTextWidget editBox;
+    private final EditBox editBox;
 
     public EnergyCounterScreen(EnergyCounterMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
-
 
         this.button = new ExtendedButton(0, 0, 50, 16,
                 Component.literal("Reset"),
@@ -35,7 +34,7 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
                         )
         );
 
-        this.editBox = new ImprovedTextWidget(Minecraft.getInstance().font, 0, 0, 70, 16) {
+        this.editBox = new EditBox(Minecraft.getInstance().font, 0, 0, 70, 16, Component.empty()) {
             @Override
             public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                 if (keyCode == InputConstants.KEY_E) {
