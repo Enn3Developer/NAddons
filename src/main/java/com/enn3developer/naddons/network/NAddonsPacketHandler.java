@@ -2,6 +2,7 @@ package com.enn3developer.naddons.network;
 
 import com.enn3developer.naddons.NAddons;
 import com.enn3developer.naddons.network.packets.CustomerC2SPacket;
+import com.enn3developer.naddons.network.packets.PowerRateC2SPacket;
 import com.enn3developer.naddons.network.packets.ResetC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,6 +37,12 @@ public class NAddonsPacketHandler {
                 .decoder(CustomerC2SPacket::new)
                 .encoder(CustomerC2SPacket::toBytes)
                 .consumerMainThread(CustomerC2SPacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(PowerRateC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PowerRateC2SPacket::new)
+                .encoder(PowerRateC2SPacket::toBytes)
+                .consumerMainThread(PowerRateC2SPacket::handle)
                 .add();
     }
 

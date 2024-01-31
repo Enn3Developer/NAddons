@@ -45,6 +45,9 @@ public class ItemCard extends ItemCardMain {
         if (reader.hasField("n_power") && (settings & 2) > 0) {
             result.add(new PanelString("msg.naddons.n_power", reader.getDouble("n_power"), showLabels));
         }
+        if (reader.hasField("n_power_rate") && (settings & 8) > 0) {
+            result.add(new PanelString("msg.naddons.n_power_rate", reader.getString("n_power_rate"), showLabels));
+        }
 
         return result;
     }
@@ -56,6 +59,7 @@ public class ItemCard extends ItemCardMain {
         settings.add(new PanelSetting(I18n.get("msg.naddons.n_energy_settings"), 1));
         settings.add(new PanelSetting(I18n.get("msg.naddons.n_power_settings"), 2));
         settings.add(new PanelSetting(I18n.get("msg.naddons.n_customer_settings"), 4));
+        settings.add(new PanelSetting(I18n.get("msg.naddons.n_rate_settings"), 8));
 
         return settings;
     }

@@ -15,6 +15,7 @@ public class NAddonsCrossMod extends CrossModBase {
         tag.putDouble("n_energy", energyCounter.getCountedEU());
         tag.putDouble("n_power", energyCounter.getPower());
         tag.putString("n_customer", energyCounter.getCustomer());
+        tag.putString("n_power_rate", energyCounter.getPowerRate());
         return tag;
     }
 }

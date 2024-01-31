@@ -46,6 +46,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
     private boolean addedToEnergyNet;
     private String ownerName;
     private String customer;
+    private String powerRate;
     private String emit;
     private String accept;
 
@@ -63,6 +64,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.tickUpdates = 5;
         this.ownerName = "";
         this.customer = "";
+        this.powerRate = "";
         this.setEnergyFacing(pBlockState.getValue(BlockStateProperties.FACING));
     }
 
@@ -156,6 +158,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         this.inventory.deserializeNBT(tag.getCompound("N_INV"));
         this.ownerName = tag.getString("N_OWN");
         this.customer = tag.getString("N_CUM");
+        this.powerRate = tag.getString("N_POW");
         String facing = tag.getString("N_FACE");
         if (facing.isEmpty()) {
             facing = "north";
@@ -181,6 +184,7 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
         tag.put("N_INV", this.inventory.serializeNBT());
         tag.putString("N_OWN", this.ownerName);
         tag.putString("N_CUM", this.customer);
+        tag.putString("N_POW", this.powerRate);
         tag.putString("N_FACE", this.getBlockState().getValue(BlockStateProperties.FACING).getName());
     }
 
@@ -378,5 +382,13 @@ public class EnergyCounterTile extends BaseTileEntity implements IEnergyStorage,
 
     public void setCustomer(String customer) {
         this.customer = customer;
+    }
+
+    public String getPowerRate() {
+        return powerRate;
+    }
+
+    public void setPowerRate(String powerRate) {
+        this.powerRate = powerRate;
     }
 }

@@ -4,6 +4,7 @@ import com.enn3developer.naddons.NAddons;
 import com.enn3developer.naddons.menus.EnergyCounterMenu;
 import com.enn3developer.naddons.network.NAddonsPacketHandler;
 import com.enn3developer.naddons.network.packets.CustomerC2SPacket;
+import com.enn3developer.naddons.network.packets.PowerRateC2SPacket;
 import com.enn3developer.naddons.network.packets.ResetC2SPacket;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -21,7 +22,8 @@ import org.jetbrains.annotations.NotNull;
 public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(NAddons.MODID, "textures/gui/energy_counter.png");
     private final ExtendedButton button;
-    private final EditBox editBox;
+    private final EditBox editCustomer;
+    private final EditBox editPowerRate;
 
     public EnergyCounterScreen(EnergyCounterMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
@@ -34,7 +36,7 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
                         )
         );
 
-        this.editBox = new EditBox(Minecraft.getInstance().font, 0, 0, 70, 16, Component.empty()) {
+        this.editCustomer = new EditBox(Minecraft.getInstance().font, 0, 0, 70, 16, Component.empty()) {
             @Override
             public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                 if (keyCode == InputConstants.KEY_E) {
@@ -43,20 +45,40 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
         };
-        this.editBox.setValue(this.menu.getEnergyCounter().getCustomer());
-        this.editBox.setEditable(true);
-        this.editBox.setVisible(true);
-        this.editBox.setResponder(string ->
+        this.editCustomer.setValue(this.menu.getEnergyCounter().getCustomer());
+        this.editCustomer.setEditable(true);
+        this.editCustomer.setVisible(true);
+        this.editCustomer.setResponder(string ->
                 NAddonsPacketHandler.sendToServer(
                         new CustomerC2SPacket(this.menu.getEnergyCounter().getBlockPos(), string)
-                ));
+                )
+        );
+
+        this.editPowerRate = new EditBox(Minecraft.getInstance().font, 0, 0, 50, 16, Component.empty()) {
+            @Override
+            public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+                if (keyCode == InputConstants.KEY_E) {
+                    return true;
+                }
+                return super.keyPressed(keyCode, scanCode, modifiers);
+            }
+        };
+        this.editPowerRate.setValue(this.menu.getEnergyCounter().getPowerRate());
+        this.editPowerRate.setEditable(true);
+        this.editPowerRate.setVisible(true);
+        this.editPowerRate.setResponder(string ->
+                NAddonsPacketHandler.sendToServer(
+                        new PowerRateC2SPacket(this.menu.getEnergyCounter().getBlockPos(), string)
+                )
+        );
     }
 
     @Override
     protected void init() {
         super.init();
         this.addRenderableWidget(this.button);
-        this.addRenderableWidget(this.editBox);
+        this.addRenderableWidget(this.editCustomer);
+        this.addRenderableWidget(this.editPowerRate);
     }
 
     @Override
@@ -85,7 +107,10 @@ public class EnergyCounterScreen extends AbstractContainerScreen<EnergyCounterMe
         this.button.x = (int) (drawX + 60);
         this.button.y = (int) (drawY + 25);
 
-        this.editBox.x = (int) (drawX - 20);
-        this.editBox.y = (int) (drawY + 25);
+        this.editCustomer.x = (int) (drawX - 20);
+        this.editCustomer.y = (int) (drawY + 25);
+
+        this.editPowerRate.x = (int) drawX + 60;
+        this.editPowerRate.y = (int) (drawY + 45);
     }
 }
