@@ -6,9 +6,11 @@
   "refmap": "mixins.naddons.refmap.json",
   "mixins": [
     "BaseUpgradeItemMixin",
+    "ChatFormattingMixin",
     "CrossModLoaderMixin",
     "ItemsMixin",
-    "ModItemsMixin"
+    "ModItemsMixin",
+    "SharedConstantsMixin"
   ],
   "client": [],
   "server": [],
