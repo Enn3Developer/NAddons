@@ -12,7 +12,10 @@
     "ModItemsMixin",
     "SharedConstantsMixin"
   ],
-  "client": [],
+  "client": [
+    "LoadingOverlayMixin",
+    "ServerRedirectHandlerMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
