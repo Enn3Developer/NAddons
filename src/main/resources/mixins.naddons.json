@@ -14,7 +14,7 @@
   ],
   "client": [
     "LoadingOverlayMixin",
-    "ServerRedirectHandlerMixin"
+    "ServerNameResolverMixin"
   ],
   "server": [],
   "injectors": {
