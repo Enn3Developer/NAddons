@@ -2,6 +2,7 @@
   "itemGroup.nAddons": "N Addons",
   "menu.title.naddons.energy_counter": "N Addons Contatore",
   "block.naddons.energy_counter": "Contatore",
+  "block.naddons.wireless_receiver": "Ricevitore Wireless",
   "item.naddons.item_card": "Lettore Energetico",
   "item.naddons.item_kit": "Kit Lettore Energetico",
   "msg.naddons.n_energy": "Energia: %s Wh",

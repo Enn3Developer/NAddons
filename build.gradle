@@ -101,6 +101,7 @@ dependencies {
     implementation fg.deobf("curse.maven:energy-control-373450:4226109")
     implementation fg.deobf("curse.maven:mekanism-268560:4644795")
     implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:5016921")
+    implementation fg.deobf("curse.maven:cc-tweaked-282001:5005332")
 }
 
 mixin {

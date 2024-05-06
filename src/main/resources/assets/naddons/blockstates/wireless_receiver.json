@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "naddons:block/wireless_receiver_off"
+    },
+    "lit=true": {
+      "model": "naddons:block/wireless_receiver_on"
+    }
+  }
+}

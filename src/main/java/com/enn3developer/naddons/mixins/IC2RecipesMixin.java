@@ -15,6 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class IC2RecipesMixin {
     @Inject(method = "addComponents", at = @At(value = "TAIL"), remap = false)
     private static void injectAlloyRecipe(IAdvancedCraftingManager recipes, CallbackInfo ci) {
-        recipes.addShapedIC2Recipe("advanced_alloy", new ItemStack(IC2Items.INGOT_ADVANCED_ALLOY, 2), "III", "BBB", "TTT", 'I', IC2Tags.INGOT_REFINED_IRON, 'B', IC2Tags.INGOT_BRONZE, 'T', Tags.ALUMINUM_TAG);
+        recipes.addShapedIC2Recipe("n_advanced_alloy", new ItemStack(IC2Items.INGOT_ADVANCED_ALLOY, 2), "III", "BBB", "TTT", 'I', IC2Tags.INGOT_REFINED_IRON, 'B', IC2Tags.INGOT_BRONZE, 'T', Tags.ALUMINUM_TAG);
     }
 }

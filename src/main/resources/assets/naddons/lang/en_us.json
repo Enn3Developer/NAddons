@@ -2,6 +2,7 @@
   "itemGroup.nAddons": "N Addons",
   "menu.title.naddons.energy_counter": "N Addons Energy Counter",
   "block.naddons.energy_counter": "Energy Counter",
+  "block.naddons.wireless_receiver": "Wireless Receiver",
   "item.naddons.item_card": "Energy Reader",
   "item.naddons.item_kit": "Energy Reader Kit",
   "msg.naddons.n_energy": "Energy: %s Wh",
