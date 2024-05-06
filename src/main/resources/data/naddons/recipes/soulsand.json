@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sas",
+    "asa",
+    "sas"
+  ],
+  "key": {
+    "s": {
+      "item": "forestry:ash"
+    },
+    "a": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "minecraft:soul_sand",
+    "count": 8
+  }
+}
