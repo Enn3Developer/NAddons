@@ -8,6 +8,7 @@
     "BaseUpgradeItemMixin",
     "ChatFormattingMixin",
     "CrossModLoaderMixin",
+    "IC2RecipesMixin",
     "ItemsMixin",
     "ModItemsMixin",
     "SharedConstantsMixin"
