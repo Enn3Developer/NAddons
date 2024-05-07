@@ -3,10 +3,7 @@ package com.enn3developer.naddons.mixins;
 import com.google.gson.Gson;
 import dan200.computercraft.ComputerCraft;
 import dan200.computercraft.shared.util.IDAssigner;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,7 +27,8 @@ public class IDAssignerMixin {
     @Final
     @Shadow
     private Path idFile;
-    private Path newIdFile;
+    @Unique
+    private Path nAddons$newIdFile;
 
     @Shadow
     private Map<String, Integer> loadIds() {
@@ -39,7 +37,7 @@ public class IDAssignerMixin {
 
     @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
     public void init(Path path, CallbackInfo ci) {
-        newIdFile = path.resolveSibling(path.getFileName() + ".new");
+        nAddons$newIdFile = path.resolveSibling(path.getFileName() + ".new");
     }
 
     /**
@@ -57,7 +55,7 @@ public class IDAssignerMixin {
         // We've changed the ID file, so save it back again. We save to a temporary ".new" file, then move that over the
         // original. This should reduce the risk of corrupting the file if Minecraft (or the computer!) is stopped.
         try {
-            try (var channel = FileChannel.open(newIdFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+            try (var channel = FileChannel.open(nAddons$newIdFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
                 Writer writer = new BufferedWriter(Channels.newWriter(channel, StandardCharsets.UTF_8));
                 GSON.toJson(ids, writer);
                 writer.flush();
@@ -66,9 +64,9 @@ public class IDAssignerMixin {
             }
 
             try {
-                Files.move(newIdFile, idFile, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                Files.move(nAddons$newIdFile, idFile, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             } catch (AtomicMoveNotSupportedException | UnsupportedOperationException e) {
-                Files.move(newIdFile, idFile, StandardCopyOption.REPLACE_EXISTING);
+                Files.move(nAddons$newIdFile, idFile, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             ComputerCraft.log.error("Cannot update ID file '{}'", idFile, e);
