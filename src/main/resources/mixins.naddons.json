@@ -9,6 +9,7 @@
     "ChatFormattingMixin",
     "CrossModLoaderMixin",
     "IC2RecipesMixin",
+    "IDAssignerMixin",
     "ItemsMixin",
     "ModItemsMixin",
     "SharedConstantsMixin"
