@@ -8,6 +8,8 @@ import com.enn3developer.naddons.screens.EnergyCounterScreen;
 import com.enn3developer.naddons.tiles.BlockEntities;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -38,7 +40,7 @@ public class NAddons {
         BLOCK_ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
         MENUS.register(modEventBus);
-        
+
         NAddonsPacketHandler.register();
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -56,6 +58,7 @@ public class NAddons {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> MenuScreens.register(MENUS.ENERGY_COUNTER.get(), EnergyCounterScreen::new));
+            ItemBlockRenderTypes.setRenderLayer(NAddons.BLOCKS.WIRE_MESH.get(), RenderType.cutout());
         }
     }
 }

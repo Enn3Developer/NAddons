@@ -21,6 +21,7 @@ public class Items extends NRegister<Item> {
 
     public final RegistryObject<Item> ENERGY_COUNTER = super.register.register("energy_counter", () -> new BlockItem(NAddons.BLOCKS.ENERGY_COUNTER.get(), new Item.Properties().tab(N_ADDONS_TAB)));
     public final RegistryObject<Item> WIRELESS_RECEIVER = super.register.register("wireless_receiver", () -> new BlockItem(NAddons.BLOCKS.WIRELESS_RECEIVER.get(), new Item.Properties().tab(N_ADDONS_TAB)));
+    public final RegistryObject<Item> WIRE_MESH = super.register.register("wire_mesh", () -> new BlockItem(NAddons.BLOCKS.WIRE_MESH.get(), new Item.Properties().tab(N_ADDONS_TAB)));
     public final RegistryObject<ItemCard> ITEM_CARD = super.register.register("item_card", ItemCard::new);
     public final RegistryObject<ItemKit> ITEM_KIT = super.register.register("item_kit", ItemKit::new);
 

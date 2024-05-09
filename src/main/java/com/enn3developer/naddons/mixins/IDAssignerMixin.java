@@ -44,7 +44,7 @@ public class IDAssignerMixin {
      * @author SquidDev
      * @reason Ensure atomic writes
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public synchronized int getNextId(String kind) {
         if (ids == null) ids = loadIds();
 
