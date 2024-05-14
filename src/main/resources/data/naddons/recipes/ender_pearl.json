@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xxx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "ic2:ingot_uranium"
+    }
+  },
+  "result": {
+    "item": "minecraft:ender_pearl"
+  }
+}

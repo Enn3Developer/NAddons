@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xxx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "enhancedgeology:mguf6"
+    }
+  },
+  "result": {
+    "item": "minecraft:nether_star"
+  }
+}
