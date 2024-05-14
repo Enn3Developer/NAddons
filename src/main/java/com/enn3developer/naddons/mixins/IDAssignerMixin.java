@@ -20,17 +20,17 @@ import java.util.Map;
 @Mixin(IDAssigner.class)
 public class IDAssignerMixin {
     @Final
-    @Shadow
+    @Shadow(remap = false)
     private static Gson GSON;
-    @Shadow
+    @Shadow(remap = false)
     private Map<String, Integer> ids;
     @Final
-    @Shadow
+    @Shadow(remap = false)
     private Path idFile;
     @Unique
     private Path nAddons$newIdFile;
 
-    @Shadow
+    @Shadow(remap = false)
     private Map<String, Integer> loadIds() {
         return null;
     }
