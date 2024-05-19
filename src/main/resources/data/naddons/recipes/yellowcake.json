@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:combining",
+  "mainInput": {
+    "ingredient": {
+      "item": "ic2:ore_uranium"
+    },
+    "amount": 1
+  },
+  "extraInput": {
+    "ingredient": {
+      "item": "chemlib:sulfuric_acid"
+    },
+    "amount": 1
+  },
+  "output": {
+    "item": "enhancedgeology:uo",
+    "count": 1
+  }
+}
